@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #ff1493, #ff69b4, #ff1493);
+            background-size: 200% 200%;
+            animation: gradient 10s ease infinite;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #ff1493;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+
+        .question {
+            font-size: 1.5rem;
+            color: #ff69b4;
+            margin-bottom: 2rem;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #yes-button {
+            background: #ff1493;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        #no-button {
+            background: #ff69b4;
+            color: white;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
+        }
+
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff1493;
+            transform: rotate(45deg);
+            animation: floatingHeart 4s ease-in infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #ff1493;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            left: -10px;
+        }
+
+        .heart::after {
+            top: -10px;
+        }
+
+        @keyframes floatingHeart {
+            0% {
+                transform: rotate(45deg) translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(45deg) translateY(-100vh) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts"></div>
+    <div class="container animate__animated animate__bounceIn">
+        <h1>Will You Be My Valentine?</h1>
+        <p class="question">You're too hot to say no! 🔥</p>
+        <div class="buttons">
+            <button id="yes-button" class="animate__animated animate__pulse animate__infinite">YES PLEASE! 😘</button>
+            <button id="no-button">No way 💔</button>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            document.querySelector('.hearts').appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        setInterval(createHeart, 300);
+
+        document.getElementById('yes-button').addEventListener('click', function() {
+            this.textContent = "WOOHOO! 💖";
+            document.querySelector('.question').textContent = "I knew you couldn't resist! 🥰";
+            document.querySelector('.container').classList.add('animate__tada');
+        });
+
+        let noCount = 0;
+        const noButton = document.getElementById('no-button');
+        
+        noButton.addEventListener('mouseover', function() {
+            const container = document.querySelector('.container');
+            const rect = container.getBoundingClientRect();
+            const buttonRect = this.getBoundingClientRect();
+            
+            let newX, newY;
+            do {
+                newX = Math.random() * (rect.width - buttonRect.width);
+                newY = Math.random() * (rect.height - buttonRect.height);
+            } while (
+                Math.abs(newX - buttonRect.x) < 100 &&
+                Math.abs(newY - buttonRect.y) < 100
+            );
+            
+            this.style.position = 'absolute';
+            this.style.left = newX + 'px';
+            this.style.top = newY + 'px';
+            
+            noCount++;
+            if (noCount > 5) {
+                this.textContent = "Pretty please? 🥺";
+            }
+        });
+
+        noButton.addEventListener('click', function() {
+            alert("You're breaking my heart! 💔 Try again!");
+        });
+    </script>
+</body>
+</html>
